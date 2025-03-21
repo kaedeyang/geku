@@ -3,77 +3,111 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>紫微斗數命盤</title>
+    <title>完整紫微斗數命盤</title>
     <style>
         body {
-            background-color: #0f0f0f;
-            color: #00ffcc;
+            background-color: #121212;
+            color: #FFD700;
             font-family: 'Courier New', Courier, monospace;
             text-align: center;
         }
         .container {
-            margin-top: 50px;
+            margin-top: 20px;
         }
         input, button {
-            background-color: #222;
-            color: #00ffcc;
-            border: 1px solid #00ffcc;
+            background-color: #333;
+            color: #FFD700;
+            border: 1px solid #FFD700;
             padding: 10px;
             margin: 5px;
         }
         .grid {
             display: grid;
-            grid-template-columns: repeat(3, 1fr);
+            grid-template-columns: repeat(4, 1fr);
             grid-template-rows: repeat(4, 1fr);
             gap: 5px;
             max-width: 600px;
             margin: auto;
-            border: 2px solid #00ffcc;
+            border: 2px solid #FFD700;
             padding: 10px;
         }
         .cell {
-            border: 1px solid #00ffcc;
+            border: 1px solid #FFD700;
             padding: 10px;
-            min-height: 80px;
+            min-height: 100px;
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
+            font-size: 14px;
+        }
+        .title {
+            font-size: 18px;
+            font-weight: bold;
+            color: #FF4500;
         }
     </style>
 </head>
 <body>
     <div class="container">
         <h1>紫微斗數命盤</h1>
+        <label>出生年月日：</label>
         <input type="date" id="birthdate">
+        <label>出生時辰（0~23點）：</label>
+        <input type="number" id="birthhour" min="0" max="23">
         <button onclick="generateZiWeiChart()">生成命盤</button>
         <div class="grid" id="result"></div>
     </div>
     <script>
         function generateZiWeiChart() {
             let birthdate = document.getElementById("birthdate").value;
-            if (!birthdate) {
-                alert("請輸入生日");
+            let birthhour = parseInt(document.getElementById("birthhour").value);
+            
+            if (!birthdate || isNaN(birthhour) || birthhour < 0 || birthhour > 23) {
+                alert("請輸入完整的出生資訊！");
                 return;
             }
             
-            let chart = calculateZiWei(birthdate);
+            let chart = calculateZiWei(birthdate, birthhour);
             document.getElementById("result").innerHTML = chart;
         }
-        
-        function calculateZiWei(birthdate) {
+
+        function calculateZiWei(birthdate, birthhour) {
             let date = new Date(birthdate);
-            let year = date.getFullYear();
             let month = date.getMonth() + 1;
-            let day = date.getDate();
+            let year = date.getFullYear();
             
             let palace = ["命宮", "兄弟宮", "夫妻宮", "子女宮", "財帛宮", "疾厄宮", "遷移宮", "僕役宮", "官祿宮", "田宅宮", "福德宮", "父母宮"];
-            let stars = ["紫微", "天機", "太陽", "武曲", "天同", "廉貞", "天府", "太陰", "貪狼", "巨門", "天相", "天梁"];
+            let stars = ["紫微", "天機", "太陽", "武曲", "天同", "廉貞", "天府", "太陰", "貪狼", "巨門", "天相", "天梁", "七殺", "破軍"];
             
+            let mingIndex = (month + birthhour) % 12;
+            let siHua = ["祿", "權", "科", "忌"];
+            let huaMapping = {};
+            for (let i = 0; i < 4; i++) {
+                let index = (mingIndex + i) % 12;
+                huaMapping[palace[index]] = siHua[i];
+            }
+
+            let daXian = [];
+            for (let i = 0; i < 12; i++) {
+                daXian.push((i * 10) + " ~ " + ((i + 1) * 10 - 1) + "歲");
+            }
+
+            let liuNian = (year - 2024 + 1) % 12;
+
             let result = "";
             for (let i = 0; i < 12; i++) {
-                let starIndex = (year + month + day + i) % stars.length;
-                result += `<div class='cell'><strong>${palace[i]}</strong><br>${stars[starIndex]}</div>`;
+                let starIndex = (mingIndex + i) % stars.length;
+                let huaText = huaMapping[palace[i]] ? `<br><strong>${huaMapping[palace[i]]}</strong>` : "";
+                let daXianText = `<br>【${daXian[i]}】`;
+                let liuNianText = (i === liuNian) ? "<br>🔥【流年】🔥" : "";
+                
+                result += `<div class='cell'>
+                    <div class='title'>${palace[i]}</div>
+                    ${stars[starIndex]}${huaText}
+                    ${daXianText}
+                    ${liuNianText}
+                </div>`;
             }
             return result;
         }
