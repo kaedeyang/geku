@@ -1,94 +1,71 @@
 <!DOCTYPE html>
-<html>
-  <head>
-    <meta charset="utf-8">
-    <title>nakroth</title>
-	<style type="text/css">
-	div.me{padding:10px;border:2px solid black;text-align:center;margin-top:10px;margin-bottom:10px;}
-	div.nak{padding:10px;border:2px solid black;text-align:center;margin-top:10px;margin-bottom:10px;}
-	div.tt{background-color:black}
-	h1{text-align:center;font-ize:24px;text-decoration:underline;color:white}
-	.vid a{color:green;  font-size:20px}
-	
-   
-	
-	</style>
-  </head>
-  <body style="margin:0px;">
-  <div class="tt">
-  <h1>個人遊戲經歷自介</h2>
-  </div>
-    <div class="me">
-     <p>遊戲名稱:牛排王子 簡稱牛排</p>
-	 <p>遊玩時間:約莫4年,從s2入坑至今</p>	
-	</div>
-	
-	<div class="nak">
-	<p>擅長位置:打野,射手,凱薩路</p>
-	<br/>
-	<p>擅長角色:</p>
-	<p>打野:<abbr title="刺客,戰士">納克</abbr> <abbr title="射手">琳蒂</abbr></p>
-	<p>射手:亥犽 卡芬妮</p>
-	<p>凱薩路:呂布 愛里 贊尼爾 馬洛斯</p>
-	</div>
-	
-	<table class="box" align="center" border="1" cellpadding="5" >
-	  <tr>
-	   <td>
-	   角色名稱
-	   </td>
-	   <td>
-	   百場勝率
-	   </td>
-	   <td>
-	   總勝率
-	   </td>
-	  </tr>
-	  
-	 <tr>
-	   <td>
-	    <b>納克羅斯</b>
-	   </td>
-	   <td>
-	   67%
-	   </td>
-	   <td>
-	   53.6%
-	   </td>
-	 </tr>
-	  
-	  <tr>
-	   <td>
-	    <b>亥犽</b>
-	   </td>
-	   <td>
-	   52%
-	   </td>
-	   <td>
-	   50.4%
-	   </td>
-	  </tr>
-	  
-	  <tr>
-	   <td>
-	    <b>呂布</b>
-	   </td>
-	   <td>
-	   58%
-	   </td>
-	   <td>
-	   56.8%
-	   </td>
-	  </tr>
-	
-	</table>
-	<hr></hr>
-	<div class="vid">
-	<center>
-	<a href="https://www.youtube.com/watch?v=4DFOIsDuEME&t=606s"><b>納克A排實戰影片</b></a>
-	</center>
-	</div>
-
-	
-  </body>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>紫微斗數命盤</title>
+    <style>
+        body {
+            background-color: #0f0f0f;
+            color: #00ffcc;
+            font-family: 'Courier New', Courier, monospace;
+            text-align: center;
+        }
+        .container {
+            margin-top: 50px;
+        }
+        input, button {
+            background-color: #222;
+            color: #00ffcc;
+            border: 1px solid #00ffcc;
+            padding: 10px;
+            margin: 5px;
+        }
+        .result {
+            margin-top: 20px;
+            padding: 10px;
+            border: 1px solid #00ffcc;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>紫微斗數命盤</h1>
+        <input type="date" id="birthdate">
+        <button onclick="generateZiWeiChart()">生成命盤</button>
+        <div class="result" id="result"></div>
+    </div>
+    <script>
+        function generateZiWeiChart() {
+            let birthdate = document.getElementById("birthdate").value;
+            if (!birthdate) {
+                alert("請輸入生日");
+                return;
+            }
+            
+            let chart = calculateZiWei(birthdate);
+            document.getElementById("result").innerHTML = chart;
+        }
+        
+        function calculateZiWei(birthdate) {
+            let date = new Date(birthdate);
+            let year = date.getFullYear();
+            let month = date.getMonth() + 1;
+            let day = date.getDate();
+            
+            // 這裡用簡單的方式模擬紫微斗數推算（實際計算需更詳細的數據）
+            let palace = ["命宮", "兄弟宮", "夫妻宮", "子女宮", "財帛宮", "疾厄宮", "遷移宮", "僕役宮", "官祿宮", "田宅宮", "福德宮", "父母宮"];
+            let stars = ["紫微", "天機", "太陽", "武曲", "天同", "廉貞", "天府", "太陰", "貪狼", "巨門", "天相", "天梁"];
+            
+            let result = "<h2>你的紫微斗數命盤</h2><table border='1' style='width:100%; color:#00ffcc;'>";
+            
+            for (let i = 0; i < 12; i++) {
+                let starIndex = (year + month + day + i) % stars.length;
+                result += `<tr><td>${palace[i]}</td><td>${stars[starIndex]}</td></tr>`;
+            }
+            result += "</table>";
+            return result;
+        }
+    </script>
+</body>
 </html>
