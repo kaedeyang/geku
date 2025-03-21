@@ -21,10 +21,24 @@
             padding: 10px;
             margin: 5px;
         }
-        .result {
-            margin-top: 20px;
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            grid-template-rows: repeat(4, 1fr);
+            gap: 5px;
+            max-width: 600px;
+            margin: auto;
+            border: 2px solid #00ffcc;
             padding: 10px;
+        }
+        .cell {
             border: 1px solid #00ffcc;
+            padding: 10px;
+            min-height: 80px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
         }
     </style>
 </head>
@@ -33,7 +47,7 @@
         <h1>紫微斗數命盤</h1>
         <input type="date" id="birthdate">
         <button onclick="generateZiWeiChart()">生成命盤</button>
-        <div class="result" id="result"></div>
+        <div class="grid" id="result"></div>
     </div>
     <script>
         function generateZiWeiChart() {
@@ -53,17 +67,14 @@
             let month = date.getMonth() + 1;
             let day = date.getDate();
             
-            // 這裡用簡單的方式模擬紫微斗數推算（實際計算需更詳細的數據）
             let palace = ["命宮", "兄弟宮", "夫妻宮", "子女宮", "財帛宮", "疾厄宮", "遷移宮", "僕役宮", "官祿宮", "田宅宮", "福德宮", "父母宮"];
             let stars = ["紫微", "天機", "太陽", "武曲", "天同", "廉貞", "天府", "太陰", "貪狼", "巨門", "天相", "天梁"];
             
-            let result = "<h2>你的紫微斗數命盤</h2><table border='1' style='width:100%; color:#00ffcc;'>";
-            
+            let result = "";
             for (let i = 0; i < 12; i++) {
                 let starIndex = (year + month + day + i) % stars.length;
-                result += `<tr><td>${palace[i]}</td><td>${stars[starIndex]}</td></tr>`;
+                result += `<div class='cell'><strong>${palace[i]}</strong><br>${stars[starIndex]}</div>`;
             }
-            result += "</table>";
             return result;
         }
     </script>
